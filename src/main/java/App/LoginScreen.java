@@ -36,7 +36,6 @@ public class LoginScreen extends JFrame {
         this.setSize(370, 250);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         lblUsername = new JLabel("Username");
@@ -45,7 +44,7 @@ public class LoginScreen extends JFrame {
         txtPasswd = new JPasswordField();
         lblCat = new JLabel("Login As");
         cmbCat = new JComboBox();
-        cmbCat.setModel(new DefaultComboBoxModel(new String[] {"Admin", "Supervisor", "Booking Clerk"}));
+        cmbCat.setModel(new DefaultComboBoxModel(new String[] {"Admin"}));
         btnLogin = new JButton("Login");
         btnCancel = new JButton("Cancel");
 
@@ -111,24 +110,18 @@ public class LoginScreen extends JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error on login operation", "Login Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(ex.getMessage());
-        }//try catch closed
-    }//Login() closed
-        public void LoadMDIWindow() {
-        if (cmbCat.getSelectedItem().equals("Admin")) {
-            new MDIWindow().LoginManager();            
-        } else if (cmbCat.getSelectedItem().equals("Supervisor")) {
-            new MDIWindow().LoginSupervisor();
-        } else {
-            new MDIWindow().LoginClerk();
         }
-    }//LoginValidity() closed
+    }
 
-    private void printStacktrace(Exception ex) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void LoadMDIWindow() {
+        if (cmbCat.getSelectedItem().equals("Admin")) {
+            new Window().LoginAdmin();            
+        } 
     }
         
     private class ButtonListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == btnLogin) {
                 if (txtUser.getText() == null || txtUser.getText().equals("")) {
@@ -143,10 +136,12 @@ public class LoginScreen extends JFrame {
                 }
                 login();
             } else if (e.getSource() == btnCancel) {
-                System.exit(0);
-            }//if else closed
-        }//actionPerformed() closed
-    }//ButtonListner class closed
+               System.exit(0);
+    
+     
+            }
+        }
+    }
 
-}//LoginScreen class closed
+}
 

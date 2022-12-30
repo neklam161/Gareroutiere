@@ -4,24 +4,17 @@ package App;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.*;
-import java.io.*;
-import java.text.*;
 import java.sql.*;
-import java.awt.print.*;
 import javax.swing.table.AbstractTableModel;
 
-public class Buses extends JPanel implements Printable {
+public class Buses extends JPanel {
 
     private static JTable tblBusList;
     private JScrollPane jsp;
-    private JButton btnAddNew,  btnRefresh,  btnClose,  btnUpdate,  btnPrint;
+    private JButton btnAddNew,  btnRefresh,  btnClose,  btnUpdate;
     private JPanel tablePanel;
     private JPanel buttonPanel;
     private Statement stmt;
-    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     private static int selectedRow;
     /*JFrame JFParentFrame;
     private static int rowCnt = 0;    
@@ -34,9 +27,8 @@ public class Buses extends JPanel implements Printable {
         setLayout(new BorderLayout());
 
         tblBusList = new JTable(new AbstractTable());
-        javax.swing.table.TableColumn column = null;
         for (int i = 0; i < 4; i++) {
-            column = tblBusList.getColumnModel().getColumn(i);
+            tblBusList.getColumnModel().getColumn(i);
 //            if (i == 4) {
 //                sdf.format(i);
 //            }//if btnClosed
@@ -49,12 +41,12 @@ public class Buses extends JPanel implements Printable {
         btnUpdate = new JButton("Update");
         btnRefresh = new JButton("Refresh");
         btnClose = new JButton("Close");
-        btnPrint = new JButton("Print");
+        
         buttonPanel = new javax.swing.JPanel(new java.awt.FlowLayout());
         buttonPanel.add(btnAddNew);
         buttonPanel.add(btnUpdate);
         buttonPanel.add(btnRefresh);
-        buttonPanel.add(btnPrint);
+        
         buttonPanel.add(btnClose);
 
         add(tablePanel, BorderLayout.CENTER);
@@ -62,80 +54,55 @@ public class Buses extends JPanel implements Printable {
 
         try {
             stmt = DBConnect.getDBConnection().createStatement();
-        } catch (Exception excp) {
+        } catch (SQLException excp) {
             JOptionPane.showMessageDialog(null, "Error on database connection", "Statement error", JOptionPane.ERROR_MESSAGE);
-        }//try catch closed
+        }
 
         reloaded();
-        btnAddNew.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                AddEntry frm = new AddEntry();
-                MDIWindow.desktop.add(frm);
-                frm.setVisible(true);
-                try {
-                    frm.setSelected(true);
-                } catch (Exception ex) {
-                }
+        btnAddNew.addActionListener((java.awt.event.ActionEvent e) -> {
+            AddEntry frm = new AddEntry();
+            frm.setLocation(300, 0);
+            Window.desktop.add(frm);
+            frm.setVisible(true);
+            try {
+                frm.setSelected(true);
+            } catch (Exception ex) {
             }
         });
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                setVisible(false);
-            }
+        btnClose.addActionListener((java.awt.event.ActionEvent e) -> {
+            setVisible(false);
         });
-        btnRefresh.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                reloaded();
-                setVisible(true);
-            }
-            });
-        btnPrint.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent evt) {
-                Bus_Details frm = new Bus_Details();
-                MDIWindow.desktop.add(frm);
-                frm.setVisible(true);
-                try {
-                    frm.setSelected(true);
-                } catch (Exception ex) {
-                }
-            }
+        btnRefresh.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            reloaded();
+            setVisible(true);
         });
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                String Busid,Model,Matricule ,capacity,nclass;
-                Busid = tblBusList.getValueAt(getSelectedRow(), 0).toString();        
-                Model = tblBusList.getValueAt(getSelectedRow(), 1).toString();
-                Matricule = tblBusList.getValueAt(getSelectedRow(), 2).toString();
-                capacity = tblBusList.getValueAt(getSelectedRow(), 3).toString();
-                nclass=tblBusList.getValueAt(getSelectedRow(), 4).toString();
-                UpdateEntry frm = new UpdateEntry(Busid, Model, Matricule, capacity,nclass);
-                MDIWindow.desktop.add(frm);
-                frm.setVisible(true);
-            }
+       
+        btnUpdate.addActionListener((java.awt.event.ActionEvent e) -> {
+            String Busid,Model,Matricule ,capacity,nclass;
+            Busid = tblBusList.getValueAt(getSelectedRow(), 0).toString();
+            Model = tblBusList.getValueAt(getSelectedRow(), 1).toString();
+            Matricule = tblBusList.getValueAt(getSelectedRow(), 2).toString();
+            capacity = tblBusList.getValueAt(getSelectedRow(), 3).toString();
+            nclass=tblBusList.getValueAt(getSelectedRow(), 4).toString();
+            UpdateEntry frm = new UpdateEntry(Busid, Model, Matricule, capacity,nclass);
+            Window.desktop.add(frm);
+            frm.setLocation(300, 0);
+            frm.setVisible(true);
         });
     }//constructor closed
     public static int getSelectedRow() {
         tblBusList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.ListSelectionModel rowSel = tblBusList.getSelectionModel();
-        rowSel.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-
-            public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-
-                javax.swing.ListSelectionModel sel = (ListSelectionModel) e.getSource();
-                if (!sel.isSelectionEmpty()) {
-                    selectedRow = sel.getMinSelectionIndex();
-                }
+        rowSel.addListSelectionListener((javax.swing.event.ListSelectionEvent e) -> {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            
+            javax.swing.ListSelectionModel sel = (ListSelectionModel) e.getSource();
+            if (!sel.isSelectionEmpty()) {
+                selectedRow = sel.getMinSelectionIndex();
             }
         });
 
@@ -148,22 +115,27 @@ public class Buses extends JPanel implements Printable {
         };
         private Object[][] data = new Object[50][50];
 
+        @Override
         public int getColumnCount() {
             return columnNames.length;
         }
 
+        @Override
         public int getRowCount() {
             return data.length;
         }
 
+        @Override
         public String getColumnName(int col) {
             return columnNames[col];
         }
 
+        @Override
         public Object getValueAt(int row, int col) {
             return data[row][col];
         }
 
+        @Override
         public void setValueAt(Object value, int row, int col) {
             data[row][col] = value;
             fireTableCellUpdated(row, col);
@@ -175,6 +147,7 @@ public class Buses extends JPanel implements Printable {
             String sql = ("SELECT * FROM Buses ORDER BY Bus_id");
             int Numrow = 0;
             ResultSet result = stmt.executeQuery(sql);
+            
             while (result.next()) {
                 tblBusList.setValueAt(result.getString(1).trim(), Numrow, 0);
                 tblBusList.setValueAt(result.getString(2).trim(), Numrow, 1);
@@ -183,68 +156,10 @@ public class Buses extends JPanel implements Printable {
                 tblBusList.setValueAt(result.getString(5).trim(), Numrow, 4);
                 Numrow++;
             }//while closed
+            
         } catch (SQLException sqlex) {
             JOptionPane.showMessageDialog(null, "Error on retrieving values", "Error", JOptionPane.ERROR_MESSAGE);
-        }//try catch closed
-    }//reloaded() closed
-    public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.black);
-        int fontHeight = g2.getFontMetrics().getHeight();
-        int fontDesent = g2.getFontMetrics().getDescent();
-
-        //leave room for page number
-        double pageHeight = pageFormat.getImageableHeight() - fontHeight;
-        double pageWidth = pageFormat.getImageableWidth();
-        double tableWidth = (double) tblBusList.getColumnModel().getTotalColumnWidth();
-        double scale = 1;
-        if (tableWidth >= pageWidth) {
-            scale = pageWidth / tableWidth;
         }
-
-        double headerHeightOnPage =
-                tblBusList.getTableHeader().getHeight() * scale;
-        double tableWidthOnPage = tableWidth * scale;
-
-        double oneRowHeight = (tblBusList.getRowHeight() +
-                tblBusList.getRowMargin()) * scale;
-        int numRowsOnAPage =
-                (int) ((pageHeight - headerHeightOnPage) / oneRowHeight);
-        double pageHeightForTable = oneRowHeight * numRowsOnAPage;
-        int totalNumPages = (int) Math.ceil(((double) tblBusList.getRowCount()) / numRowsOnAPage);
-        if (pageIndex >= totalNumPages) {
-            return NO_SUCH_PAGE;
-        }
-
-        g2.translate(pageFormat.getImageableX(),
-                pageFormat.getImageableY());
-        g2.drawString("Page: " + (pageIndex + 1), (int) pageWidth / 2 - 35,
-                (int) (pageHeight + fontHeight - fontDesent));//bottom center
-
-        g2.translate(0f, headerHeightOnPage);
-        g2.translate(0f, -pageIndex * pageHeightForTable);
-        if (pageIndex + 1 == totalNumPages) {
-            int lastRowPrinted = numRowsOnAPage * pageIndex;
-            int numRowsLeft = tblBusList.getRowCount() - lastRowPrinted;
-            g2.setClip(0, (int) (pageHeightForTable * pageIndex),
-                    (int) Math.ceil(tableWidthOnPage),
-                    (int) Math.ceil(oneRowHeight * numRowsLeft));
-        } else {
-            g2.setClip(0, (int) (pageHeightForTable * pageIndex),
-                    (int) Math.ceil(tableWidthOnPage),
-                    (int) Math.ceil(pageHeightForTable));
-        }
-        g2.scale(scale, scale);
-        tblBusList.paint(g2);
-        g2.scale(1 / scale, 1 / scale);
-        g2.translate(0f, pageIndex * pageHeightForTable);
-        g2.translate(0f, -headerHeightOnPage);
-        g2.setClip(0, 0, (int) Math.ceil(tableWidthOnPage),
-                (int) Math.ceil(headerHeightOnPage));
-        g2.scale(scale, scale);
-        tblBusList.getTableHeader().paint(g2);//paint header at top
-
-        return Printable.PAGE_EXISTS;
     }
-}//class closed
+}
 

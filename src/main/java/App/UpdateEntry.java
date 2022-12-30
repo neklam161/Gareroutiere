@@ -17,9 +17,7 @@ public class UpdateEntry extends JInternalFrame {
     private JButton btnCancel;
     private JPanel fieldsPanel;
     private JPanel buttonPanel;
-//    private DateButton date_bought;
-//    private DateButton date_ins;
-//    private DateButton date_expiry;
+
     private static JTextArea txtInfo = new JTextArea(15, 40);
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -42,23 +40,14 @@ public class UpdateEntry extends JInternalFrame {
         txtCapacity = new JTextField(10);
         txtclass = new JTextField(10);
 
-//        date_bought = new DateButton();
-//        date_ins = new DateButton();
-//        date_expiry = new DateButton();
+
 
         txtBusid.setText(busid);
         txtModel.setText(model);
         txtMatricule.setText(matricule);
         txtCapacity.setText(capacity);
         txtclass.setText(nclass);
-        //date_bought.setText(db);
-        //txtIns.setText(is);
-        //date_ins.setText(ie);
-        //date_expiry.setText(id);
 
-//        date_ins.setForeground(Color.red);
-//        date_bought.setForeground(Color.red);
-//        date_expiry.setForeground(Color.red);
 
         btnUpdate = new JButton("Update");
         btnSearch = new JButton("Search");
@@ -94,31 +83,7 @@ public class UpdateEntry extends JInternalFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (txtBusNo.getText() == null ||txtBusNo.getText().equals("")) {
-//                    JOptionPane.showMessageDialog(null, "Error?? BusNo can't be null", "Error", JOptionPane.DEFAULT_OPTION);
-//                    txtBusNo.requestFocus();
-//                    return;
-//                }
-//                if (txtRegNo.getText() == null || txtRegNo.getText().equals("")) {
-//                    JOptionPane.showMessageDialog(null, "Error?? RegNo can't be null", "Error",JOptionPane.DEFAULT_OPTION);
-//                    txtRegNo.requestFocus();
-//                    return;
-//                }
-//                if (txtModel.getText() == null ||txtModel.getText().equals("")) {
-//                    JOptionPane.showMessageDialog(null, "Error?? Model Field is required", "Error",JOptionPane.DEFAULT_OPTION);
-//                    txtModel.requestFocus();
-//                    return;
-//                }
-//                if (txtCapacity.getText() == null || txtCapacity.getText().equals("")) {
-//                    JOptionPane.showMessageDialog(null, "Error?? Enter bus capacity", "Error",JOptionPane.DEFAULT_OPTION);
-//                    txtCapacity.requestFocus();
-//                    return;
-//                }
-//                if (txtIns.getText() == null || txtIns.getText().equals("")) {
-//                    JOptionPane.showMessageDialog(null, "Error?? Insurance status entry is required","Error", JOptionPane.DEFAULT_OPTION);
-//                    txtIns.requestFocus();
-//                    return;
-//                }
+
                 try {
                     Statement statement = DBConnect.getDBConnection().createStatement();
                     {
@@ -156,6 +121,7 @@ public class UpdateEntry extends JInternalFrame {
                         else{
                             String query = "DELETE  FROM Buses where Bus_id ='" + txtBusid.getText() + "'";
                             int result = stmt.executeUpdate(query);
+                            System.out.println(result);
                             if (result == 0) {
                                 JOptionPane.showMessageDialog(null, "Record Deleted","DELETION", JOptionPane.DEFAULT_OPTION);
                             } else {
@@ -225,18 +191,12 @@ public class UpdateEntry extends JInternalFrame {
                 model = rs.getString(2);
                 capacity = rs.getString(4);
                 nclass=rs.getString(5);
-
-          
-
                 txtBusid.setText(busid);
                 txtModel.setText(model);
                 txtCapacity.setText(capacity);
                 txtMatricule.setText(matricule);
                 txtclass.setText(nclass);
-//                date_bought.setText(db);
-//                txtIns.setText(is);
-//                date_ins.setText(ie);
-//                date_expiry.setText(id);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Record Not found", "ERROR",
                         JOptionPane.DEFAULT_OPTION);
